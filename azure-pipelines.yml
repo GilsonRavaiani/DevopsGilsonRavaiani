@@ -7,11 +7,20 @@ trigger:
   - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
   - task: ArchiveFiles@2
     inputs:
       rootFolderOrFile: "$(build.sourcesDirectory)"
       includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+      replaceExistingArchive: true
+      include: '**/README.md'  # Adiciona o arquivo README ao arquivamento
+
   - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
